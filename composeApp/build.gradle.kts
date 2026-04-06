@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization) // ** ADDED for Navigation **
+    alias(libs.plugins.ksp) // ** ADDED for Room (Database) **
+    alias(libs.plugins.androidx.room) // ** ADDED for Room (Database) **
 }
 
 kotlin {
@@ -43,6 +45,9 @@ kotlin {
             implementation(libs.kotlinx.serialization.json) // ** ADDED for Navigation **
             implementation(libs.androidx.navigation.compose) // ** ADDED for Navigation **
             implementation(libs.kotlinx.datetime) // ** ADDED **
+            implementation(libs.androidx.room.runtime) // ** ADDED for Room (Database) **
+            implementation(libs.androidx.sqlite.bundled) // ** ADDED for Room (Database) **
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -52,6 +57,15 @@ kotlin {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    add("kspAndroid", libs.androidx.room.compiler) // ** ADDED for Room (Database) **
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler) // ** ADDED for Room (Database) **
+    //add("kspIosX64", libs.androidx.room.compiler) // ** ADDED for Room (Database) **
+    add("kspIosArm64", libs.androidx.room.compiler) // ** ADDED for Room (Database) **
+
+}
+
+room {
+    schemaDirectory("$projectDir/schemas") // ** ADDED for Room (Database) **
 }
 
 android {

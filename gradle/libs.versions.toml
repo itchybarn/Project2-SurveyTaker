@@ -16,6 +16,9 @@ material3 = "1.10.0-alpha05"
 kotlinx-datetime = "0.7.1"  # ** ADDED **
 androidx-navigation = "2.9.2" # ** ADDED for Navigation **
 kotlinxSerializationJson = "1.10.0" # ** ADDED for Navigation **
+room = "2.8.4" # ** ADDED for Room (Database) **
+sqlite = "2.6.2" # ** ADDED for Room (Database) **
+ksp = "2.3.6" # ** ADDED for Room (Database) **
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -38,6 +41,9 @@ compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-previ
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" } # ** ADDED for Navigation **
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" } # ** ADDED for Navigation **
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }  # ** ADDED **
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" } # ** ADDED for Room (Database) **
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" } # ** ADDED for Room (Database) **
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # ** ADDED for Room (Database) **
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -46,3 +52,5 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" } # ** ADDED for Navigation **
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" } # ** ADDED for Room (Database) **
+androidx-room = { id = "androidx.room", version.ref = "room" } # ** ADDED for Room (Database) **
