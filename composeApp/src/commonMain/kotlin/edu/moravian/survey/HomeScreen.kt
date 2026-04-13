@@ -13,6 +13,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import edu.moravian.survey.data.SurveyDatabase
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import surveytaker.composeapp.generated.resources.*
@@ -32,6 +33,7 @@ data object HomeScreen
 fun HomeScreen(
     onTakeSurvey: () -> Unit,
     onOpenHistory: () -> Unit,
+    database: SurveyDatabase,
 ) {
     // TODO: complete (may need to add parameter(s))
     Column(

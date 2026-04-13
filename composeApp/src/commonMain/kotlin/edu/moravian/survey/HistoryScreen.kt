@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import edu.moravian.survey.data.DummyHasId
+import edu.moravian.survey.data.SurveyDatabase
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import surveytaker.composeapp.generated.resources.*
@@ -33,6 +34,7 @@ data object HistoryScreen
  */
 @Composable
 fun HistoryScreen(
+    database: SurveyDatabase,
     onOpenSurvey: (Long) -> Unit,
 ) {
     // TODO: complete (may need to add parameter(s))

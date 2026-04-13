@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import edu.moravian.survey.data.SurveyDatabase
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import surveytaker.composeapp.generated.resources.*
@@ -26,7 +27,7 @@ import surveytaker.composeapp.generated.resources.*
  * The main app composable. Sets up the navigation graph and top app bar.
  */
 @Composable
-fun App() {
+fun App(database: SurveyDatabase) {
     // TODO: complete (may need to add parameter(s))
     val navController = rememberNavController()
     MaterialTheme {
@@ -49,17 +50,21 @@ fun App() {
                     HomeScreen(
                         onTakeSurvey = { navController.navigate(SurveyScreen) },
                         onOpenHistory = { navController.navigate(HistoryScreen) },
+                        database = database
                     )
                 }
                 composable<SurveyScreen> { SurveyScreen { navController.navigateUp() } }
                 composable<HistoryScreen> {
-                    HistoryScreen { surveyId ->
+                    HistoryScreen(database) { surveyId ->
                         navController.navigate(ViewSurveyScreenDest(surveyId))
                     }
                 }
                 composable<ViewSurveyScreenDest> { navBackStackEntry ->
                     val surveyId = navBackStackEntry.toRoute<ViewSurveyScreenDest>().surveyId
-                    ViewSurveyScreen(surveyId)
+                    ViewSurveyScreen(
+                        surveyId = surveyId,
+                        database = database,
+                        )
                 }
             }
         }
