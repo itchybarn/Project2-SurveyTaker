@@ -11,7 +11,7 @@ import kotlinx.coroutines.IO
 //Can change the entities used, wanted to fill something in here for now.
 @Database(
     entities = [
-        SurveyEntity::class,
+        SurveyEntity::class, SurveyAnswerEntity::class,
     ],
     version = 1,
 )
