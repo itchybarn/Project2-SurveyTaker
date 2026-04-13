@@ -13,9 +13,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import edu.moravian.survey.data.DummyHasId
 import edu.moravian.survey.data.SurveyDatabase
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
@@ -37,7 +38,6 @@ fun HistoryScreen(
     database: SurveyDatabase,
     onOpenSurvey: (Long) -> Unit,
 ) {
-    // TODO: complete (may need to add parameter(s))
     Column(
         modifier = Modifier
             .safeContentPadding()
@@ -45,17 +45,26 @@ fun HistoryScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        val entries = emptyList<DummyHasId>() // TODO: load these (and change the class)
+        val entries by database.getDao().getAllSurveys().collectAsState(initial = emptyList())
 
         Text(stringResource(Res.string.history), style = MaterialTheme.typography.headlineSmall)
 
-        // TODO: show message if no surveys taken yet
+        if (entries.isEmpty()) {
+            Text(stringResource(Res.string.no_history))
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(entries, key = { it.id }) { result ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onOpenSurvey(result.id)}
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            val dateText = formatEpochMillis(result.dateTime)
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(entries, key = { it.id }) { result ->
-                Card(modifier = Modifier.fillMaxWidth().clickable { onOpenSurvey(result.id) }) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        // TODO: complete
+                            Text(stringResource(Res.string.date, dateText))
+                            Text(stringResource(Res.string.score, result.score))
+                        }
                     }
                 }
             }

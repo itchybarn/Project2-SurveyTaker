@@ -8,13 +8,6 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-// TODO: This is a dummy interface to allow us me to provide some code for you to work with
-//   You should remove it eventually once you have your actual data models defined
-//   (your data model classes should have an id property though)
-interface DummyHasId {
-    val id: Long
-}
-
 //Can change the entities used, wanted to fill something in here for now.
 @Database(
     entities = [

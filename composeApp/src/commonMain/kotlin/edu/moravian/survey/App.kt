@@ -28,7 +28,6 @@ import surveytaker.composeapp.generated.resources.*
  */
 @Composable
 fun App(database: SurveyDatabase) {
-    // TODO: complete (may need to add parameter(s))
     val navController = rememberNavController()
     MaterialTheme {
         Scaffold(
@@ -53,7 +52,12 @@ fun App(database: SurveyDatabase) {
                         database = database
                     )
                 }
-                composable<SurveyScreen> { SurveyScreen { navController.navigateUp() } }
+                composable<SurveyScreen> {
+                    SurveyScreen(
+                        onCompleted = { navController.navigateUp() },
+                        database = database
+                    )
+                }
                 composable<HistoryScreen> {
                     HistoryScreen(database) { surveyId ->
                         navController.navigate(ViewSurveyScreenDest(surveyId))

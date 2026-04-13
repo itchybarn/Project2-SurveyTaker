@@ -38,7 +38,6 @@ fun ViewSurveyScreen(
     surveyId: Long,
     database: SurveyDatabase
 ) {
-    // TODO: complete (may need to add parameter(s))
     var loading by remember { mutableStateOf(true) }
     var survey by remember { mutableStateOf(AMISOS_R_SURVEY) }
     LaunchedEffect(surveyId) {

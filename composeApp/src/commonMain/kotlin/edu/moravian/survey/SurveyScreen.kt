@@ -8,12 +8,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import edu.moravian.survey.data.SurveyDatabase
+import edu.moravian.survey.data.SurveyEntity
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
+import surveytaker.composeapp.generated.resources.Res
+import surveytaker.composeapp.generated.resources.submit
+import kotlin.time.Clock
 
 /**
  * The destination for the survey screen that can be filled out.
@@ -26,10 +39,13 @@ data object SurveyScreen
  */
 @Composable
 fun SurveyScreen(
+    database: SurveyDatabase,
     onCompleted: () -> Unit,
 ) {
-    // TODO: complete (may need to add parameter(s))
     val scope = rememberCoroutineScope()
+
+    var survey by remember { mutableStateOf(AMISOS_R_SURVEY) }
+    var showErrors by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -37,7 +53,32 @@ fun SurveyScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        // TODO: complete
+        SurveyView(
+            survey = survey,
+            showErrors = showErrors,
+            onAnswer = { updatedSurvey -> survey = updatedSurvey }
+        )
+
+        Button(
+            onClick = {
+                if (survey.questions.hasErrors) {
+                    showErrors = true
+                } else {
+                    scope.launch {
+                        val entity = SurveyEntity(
+                            dateTime = Clock.System.now().toEpochMilliseconds(),
+                            score = survey.questions.score
+                        )
+
+                        database.getDao().insertSurvey(entity)
+                        onCompleted()
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(Res.string.submit))
+        }
     }
 }
 
