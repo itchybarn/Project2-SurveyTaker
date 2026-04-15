@@ -16,9 +16,9 @@ interface SurveyDao {
 
     @Transaction
     suspend fun insertSurveyWithAnswers(survey: SurveyEntity, answers: List<SurveyAnswerEntity>) {
-        val id = insertSurvey(survey)
-        val answersWithId = answers.map { it.copy(surveyId = id) }
-        insertAnswers(answersWithId)
+        val id = insertSurvey(survey) // get ID
+        val answersWithId = answers.map { it.copy(surveyId = id) } // put ID into all the surveyAnswers
+        insertAnswers(answersWithId) // insert those answers
     }
 
     @Query("SELECT * FROM SurveyEntity ORDER BY dateTime DESC")

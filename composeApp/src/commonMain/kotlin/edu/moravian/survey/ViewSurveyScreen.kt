@@ -40,8 +40,10 @@ fun ViewSurveyScreen(
 ) {
     var loading by remember { mutableStateOf(true) }
     var survey by remember { mutableStateOf(AMISOS_R_SURVEY) }
+    var completedSurvey by remember { mutableStateOf<Survey?>(null) }
+
     LaunchedEffect(surveyId) {
-        // TODO: load the data
+        completedSurvey = survey.load(surveyId, database)
         loading = false
     }
 
@@ -59,7 +61,12 @@ fun ViewSurveyScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        // TODO: complete
-        SurveyView(survey, false, null)
+        completedSurvey?.let { loadedSurvey ->
+            SurveyView(
+                loadedSurvey,
+                false,
+                null
+            )
+        }
     }
 }

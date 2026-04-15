@@ -4,6 +4,7 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -13,8 +14,9 @@ import kotlinx.coroutines.IO
     entities = [
         SurveyEntity::class, SurveyAnswerEntity::class,
     ],
-    version = 1,
+    version = 2,
 )
+@TypeConverters(Converters::class) // use the Set converter any time it sees a Set<Int>
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class SurveyDatabase : RoomDatabase() {
     abstract fun getDao(): SurveyDao
@@ -31,4 +33,5 @@ fun getRoomDatabase(
 ): SurveyDatabase = builder
     .setDriver(BundledSQLiteDriver())
     .setQueryCoroutineContext(Dispatchers.IO)
+    .fallbackToDestructiveMigration(true) // destroys old data upon a version migration
     .build()

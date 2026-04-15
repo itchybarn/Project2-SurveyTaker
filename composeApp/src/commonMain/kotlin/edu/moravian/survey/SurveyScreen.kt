@@ -65,12 +65,7 @@ fun SurveyScreen(
                     showErrors = true
                 } else {
                     scope.launch {
-                        val entity = SurveyEntity(
-                            dateTime = Clock.System.now().toEpochMilliseconds(),
-                            score = survey.questions.score
-                        )
-
-                        database.getDao().insertSurvey(entity)
+                        survey.save(database)
                         onCompleted()
                     }
                 }
