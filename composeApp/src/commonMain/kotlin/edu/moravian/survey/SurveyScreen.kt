@@ -4,14 +4,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.moravian.survey.data.SurveyDatabase
 import edu.moravian.survey.data.SurveyEntity
 import kotlinx.coroutines.launch
@@ -40,12 +44,22 @@ data object SurveyScreen
 @Composable
 fun SurveyScreen(
     database: SurveyDatabase,
+    vm: SurveyVM = viewModel(),
     onCompleted: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
-    var survey by remember { mutableStateOf(AMISOS_R_SURVEY) }
-    var showErrors by remember { mutableStateOf(false) }
+    val survey by vm.survey.collectAsState()
+    val showErrors by vm.showErrors.collectAsState()
+    val isSetup by vm.isSetup.collectAsState()
+
+    if (!isSetup) {
+        Row {
+            CircularProgressIndicator()
+            Text("Loading...")
+        }
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -56,14 +70,12 @@ fun SurveyScreen(
         SurveyView(
             survey = survey,
             showErrors = showErrors,
-            onAnswer = { updatedSurvey -> survey = updatedSurvey }
+            onAnswer = vm::onSurveyChange
         )
 
         Button(
             onClick = {
-                if (survey.questions.hasErrors) {
-                    showErrors = true
-                } else {
+                if (vm.validate()) {
                     scope.launch {
                         survey.save(database)
                         onCompleted()

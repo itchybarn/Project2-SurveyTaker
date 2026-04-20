@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -53,8 +55,13 @@ fun App(database: SurveyDatabase) {
                     )
                 }
                 composable<SurveyScreen> {
+                    val vm: SurveyVM = viewModel()
+                    LaunchedEffect(Unit) {
+                        vm.setup(AMISOS_R_SURVEY)
+                    }
                     SurveyScreen(
                         onCompleted = { navController.navigateUp() },
+
                         database = database
                     )
                 }
