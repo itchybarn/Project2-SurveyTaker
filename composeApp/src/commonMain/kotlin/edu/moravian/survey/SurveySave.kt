@@ -44,12 +44,8 @@ suspend fun Survey.save(database: SurveyDatabase) {
     database.getDao().insertSurveyWithAnswers(surveyEntity, answerEntities)
 }
 
-/**
- * Loads the survey result with the given ID from the repository and maps it back to a Survey.
- */
-suspend fun Survey.load(surveyId: Long, database: SurveyDatabase): Survey {
-    val savedAnswers = database.getDao().getAnswersForSurvey(surveyId)
-    val answerMap = savedAnswers.associateBy { it.questionId } // key is question, value is answer
+fun Survey.applyAnswers(savedAnswers: List<SurveyAnswerEntity>): Survey {
+    val answerMap = savedAnswers.associateBy { it.questionId }
 
     return map { item ->
         val savedAnswer = answerMap[item.id] ?: return@map item
@@ -67,4 +63,12 @@ suspend fun Survey.load(surveyId: Long, database: SurveyDatabase): Survey {
             }
         }
     }
+}
+
+/**
+ * Loads the survey result with the given ID from the repository and maps it back to a Survey.
+ */
+suspend fun Survey.load(surveyId: Long, database: SurveyDatabase): Survey {
+    val savedAnswers = database.getDao().getAnswersForSurvey(surveyId)
+    return this.applyAnswers(savedAnswers)
 }

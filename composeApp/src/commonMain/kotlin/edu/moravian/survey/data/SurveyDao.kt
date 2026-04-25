@@ -24,6 +24,12 @@ interface SurveyDao {
     @Query("SELECT * FROM SurveyEntity ORDER BY dateTime DESC")
     fun getAllSurveys(): Flow<List<SurveyEntity>>
 
+    @Query("SELECT * FROM SurveyEntity ORDER BY dateTime DESC LIMIT 1 ")
+    suspend fun getRecentSurvey(): SurveyEntity?
+
+    @Query("SELECT * FROM SurveyAnswerEntity WHERE surveyId = :surveyId AND questionId IN (:q1id, :q2Id)")
+    suspend fun getPairAnswersFromSurvey(q1id: String, q2Id: String, surveyId: Long): List<SurveyAnswerEntity>
+
     @Query("SELECT * FROM SurveyEntity WHERE id = :id")
     suspend fun getSurveyById(id: Long): SurveyEntity?
 

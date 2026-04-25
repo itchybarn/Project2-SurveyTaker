@@ -57,7 +57,19 @@ fun App(database: SurveyDatabase) {
                 composable<SurveyScreen> {
                     val vm: SurveyVM = viewModel()
                     LaunchedEffect(Unit) {
-                        vm.setup(AMISOS_R_SURVEY)
+                        val recentSurvey = database.getDao().getRecentSurvey()
+                        if (recentSurvey != null) {
+                            val qIds = AMISOS_R_SURVEY.questions.take(2).map { it.id }
+                            val answers = database.getDao().getPairAnswersFromSurvey(
+                                q1id = qIds[0],
+                                q2Id = qIds[1],
+                                surveyId = recentSurvey.id
+                            )
+                            val survey = AMISOS_R_SURVEY.applyAnswers(answers)
+                            vm.setup(survey)
+                        } else {
+                            vm.setup(AMISOS_R_SURVEY)
+                        }
                     }
                     SurveyScreen(
                         onCompleted = { navController.navigateUp() },

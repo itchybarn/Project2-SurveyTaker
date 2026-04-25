@@ -1,7 +1,6 @@
 package edu.moravian.survey
 
 import androidx.lifecycle.ViewModel
-import edu.moravian.survey.data.SurveyDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
